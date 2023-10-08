@@ -1,15 +1,17 @@
-# A opencv-base idea to extract several images from a image with white background
+# Extracting Multiple Images from an Image with a White Background using OpenCV
 
 
 # Install requirement
 
 `pip install opencv-python`
 
-# Usage
+# Usage Instructions
 
-1. Put images in input_images (jpg)
+Follow these steps to extract multiple images from an image with a white background:
 
-2. Following the command:
+1. Prepare Your Input Images (jpg)
+
+2. Use the Following Commands:
 
     'q': exit 
     'n': next image
