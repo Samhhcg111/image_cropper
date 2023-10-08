@@ -76,15 +76,6 @@ class Cropper:
         
         to_save=False
         rect_list = []
-
-        cv2.namedWindow("preview")
-        cv2.createTrackbar('area_ratio_low', 'preview',self.area_ratio_low, 80, self.update_area_ratio_low)
-        cv2.createTrackbar('area_ratio_up', 'preview', self.area_ratio_up, 100, self.update_area_ratio_up)
-        cv2.namedWindow("threshold")
-        cv2.createTrackbar('white_thres_up', 'threshold', self.white_thres, 254, self.update_white_thres)
-        cv2.setMouseCallback("preview", self.MouseCallback)
-        cv2.setMouseCallback("threshold", self.MouseCallback)
-        
         crop_list = []
 
         while True:
@@ -167,9 +158,16 @@ class Cropper:
                     print("save img",img_path)
                     cv2.imwrite(img_path, roi)
                     save_cnt+=1
-                    
+
     def start(self):
         image_files = list(self.image_files)
+        cv2.namedWindow("preview")
+        cv2.createTrackbar('ARL', 'preview',self.area_ratio_low, 80, self.update_area_ratio_low)
+        cv2.createTrackbar('ARU', 'preview', self.area_ratio_up, 100, self.update_area_ratio_up)
+        cv2.namedWindow("threshold")
+        cv2.createTrackbar('WThres', 'threshold', self.white_thres, 254, self.update_white_thres)
+        cv2.setMouseCallback("preview", self.MouseCallback)
+        cv2.setMouseCallback("threshold", self.MouseCallback)
         # print(image_files)
         while len(image_files)>0:
             image_path = image_files[0]

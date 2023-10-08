@@ -20,3 +20,8 @@ Follow these steps to extract multiple images from an image with a white backgro
     'c': crop specific roi
     'r': reset image
     's': save results
+
+    Trackbars:
+        ARL: the area ratio low boundary for rectangles tracking
+        ARU: the area ratio upper boundary for rectangles tracking
+        WThres: White filter threshold
