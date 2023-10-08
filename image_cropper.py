@@ -86,12 +86,14 @@ class Cropper:
                 if self.trigger_draw_v_line:
                     cv2.line(padded_image, (self.mx, 0), (self.mx,padded_image_modified.shape[0]), (255, 255, 255), self.line_len)
                     self.trigger_draw_v_line = False
+                    self.drawing_v_line = False
 
             if self.drawing_h_line:
                 cv2.line(padded_image_modified, (0,self.my), (padded_image_modified.shape[1],self.my), (255, 255, 255), self.line_len)
                 if self.trigger_draw_h_line:
                     cv2.line(padded_image, (0,self.my), (padded_image_modified.shape[1],self.my), (255, 255, 255), self.line_len)
                     self.trigger_draw_h_line = False
+                    self.drawing_h_line = False
 
             gray = cv2.cvtColor(padded_image_modified, cv2.COLOR_BGR2GRAY)
             gray = cv2.GaussianBlur(gray, (3, 3), 0)
@@ -123,7 +125,20 @@ class Cropper:
                 else:
                     cv2.rectangle(padded_image_modified,self.crop_left_top, (self.mx,self.my), (255, 0, 0), 5)    
                     if self.trigger_draw_crop:
-                        crop_list.append((self.crop_left_top[0],self.crop_left_top[1],self.mx,self.my))
+
+                        x1 = self.crop_left_top[0]
+                        y1 = self.crop_left_top[1]
+                        x2 = self.mx
+                        y2 = self.my
+                        if x1>x2:
+                            tmp = x1
+                            x1 = x2
+                            x2 = tmp
+                        if y1 > y2:
+                            tmp = y1
+                            y1 = y2
+                            y2 = tmp
+                        crop_list.append((x1,y1,x2,y2))
                         self.trigger_draw_crop = False
                         self.draw_crop_rect = False
 
@@ -147,6 +162,9 @@ class Cropper:
                 padded_image = self.pad_image(self.src_img)
                 rect_list = []
                 crop_list = []
+            elif key == ord('x'):
+                self.drawing_v_line = True
+                self.drawing_h_line = True
             elif key == ord('s'):
                 if not os.path.exists(self.directory_path):
                     os.makedirs(self.directory_path)
@@ -154,10 +172,11 @@ class Cropper:
                 save_list = rect_list+crop_list
                 for rect in save_list:
                     roi = padded_image[rect[1]:rect[3], rect[0]:rect[2]]
-                    img_path = os.path.join(self.directory_path,f'{base_name}_#{save_cnt}.jpg')
-                    print("save img",img_path)
-                    cv2.imwrite(img_path, roi)
-                    save_cnt+=1
+                    if roi.shape[0]>0 and roi.shape[1]>0:
+                        img_path = os.path.join(self.directory_path,f'{base_name}_#{save_cnt}.jpg')
+                        print("save img",img_path)
+                        cv2.imwrite(img_path, roi)
+                        save_cnt+=1
 
     def start(self):
         image_files = list(self.image_files)

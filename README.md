@@ -25,11 +25,13 @@ Follow these steps to extract multiple images from an image with a white backgro
 
     'h': draw horizontal line for crop
 
+    'x': draw cross line
+
     'c': crop specific roi
 
     'r': reset image
 
-    's': save results
+    's': save results 
 
     mouse left button: toggle
 
