@@ -1,5 +1,7 @@
 # Extracting Multiple Images from an Image with a White Background using OpenCV
 
+![demo](Docs/example.jpg)
+![demo](Docs/example_output.jpg)
 
 # Install requirement
 

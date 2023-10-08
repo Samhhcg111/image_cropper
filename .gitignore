@@ -1,4 +1,5 @@
 input_images/*
+!input_images/example.jpg
 pyenv/
 test.py
 output/
