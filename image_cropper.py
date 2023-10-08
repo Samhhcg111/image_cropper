@@ -38,8 +38,8 @@ class Cropper:
         self.draw_crop_rect = False
 
     def MouseCallback(self,event, x, y, flags, param):
-        self.my = int(y *self.src_img.shape[0]/self.preview_h)
-        self.mx = int(x *self.src_img.shape[1]/self.preview_w)
+        self.my = int(y *self.padded_image.shape[0]/self.preview_h)
+        self.mx = int(x *self.padded_image.shape[1]/self.preview_w)
         if event == cv2.EVENT_LBUTTONDOWN:
             if self.drawing_h_line:
                 self.trigger_draw_h_line=True
@@ -71,8 +71,8 @@ class Cropper:
         print("load: ",image_path)
         base_name = os.path.basename(image_path)
         self.src_img = cv2.imread(image_path)
-        padded_image = self.pad_image(self.src_img)
-        padded_image_area = padded_image.shape[0]*padded_image.shape[1] 
+        self.padded_image = self.pad_image(self.src_img)
+        padded_image_area = self.padded_image.shape[0]*self.padded_image.shape[1] 
         
         to_save=False
         rect_list = []
@@ -80,18 +80,18 @@ class Cropper:
 
         while True:
             rect_list = []
-            padded_image_modified = padded_image.copy()
+            padded_image_modified = self.padded_image.copy()
             if self.drawing_v_line:
                 cv2.line(padded_image_modified, (self.mx, 0), (self.mx,padded_image_modified.shape[0]), (255, 255, 255), self.line_len)
                 if self.trigger_draw_v_line:
-                    cv2.line(padded_image, (self.mx, 0), (self.mx,padded_image_modified.shape[0]), (255, 255, 255), self.line_len)
+                    cv2.line(self.padded_image, (self.mx, 0), (self.mx,padded_image_modified.shape[0]), (255, 255, 255), self.line_len)
                     self.trigger_draw_v_line = False
                     self.drawing_v_line = False
 
             if self.drawing_h_line:
                 cv2.line(padded_image_modified, (0,self.my), (padded_image_modified.shape[1],self.my), (255, 255, 255), self.line_len)
                 if self.trigger_draw_h_line:
-                    cv2.line(padded_image, (0,self.my), (padded_image_modified.shape[1],self.my), (255, 255, 255), self.line_len)
+                    cv2.line(self.padded_image, (0,self.my), (padded_image_modified.shape[1],self.my), (255, 255, 255), self.line_len)
                     self.trigger_draw_h_line = False
                     self.drawing_h_line = False
 
@@ -159,7 +159,7 @@ class Cropper:
                 self.draw_crop_rect = True
                 self.crop_left_top = None
             elif key == ord('r'):
-                padded_image = self.pad_image(self.src_img)
+                self.padded_image = self.pad_image(self.src_img)
                 rect_list = []
                 crop_list = []
             elif key == ord('x'):
@@ -171,7 +171,7 @@ class Cropper:
                 save_cnt = 0
                 save_list = rect_list+crop_list
                 for rect in save_list:
-                    roi = padded_image[rect[1]:rect[3], rect[0]:rect[2]]
+                    roi = self.padded_image[rect[1]:rect[3], rect[0]:rect[2]]
                     if roi.shape[0]>0 and roi.shape[1]>0:
                         img_path = os.path.join(self.directory_path,f'{base_name}_#{save_cnt}.jpg')
                         print("save img",img_path)
