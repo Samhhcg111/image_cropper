@@ -17,7 +17,7 @@ Follow these steps to extract multiple images from an image with a white backgro
 
 ```
 
-'q': exit 
+    'q': exit 
 
     'n': next image
 
@@ -30,6 +30,10 @@ Follow these steps to extract multiple images from an image with a white backgro
     'r': reset image
 
     's': save results
+
+    mouse left button: toggle
+
+    mouse right button: untoggle
 
     Trackbars:
 
